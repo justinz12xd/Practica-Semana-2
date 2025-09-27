@@ -26,9 +26,9 @@ export interface AnimalUpdate{
 
 
 export interface IAnimalRepo {
-  insert(animal: Animal, callback: (err: Error | null, result?: Animal) => void): void; 
-  findById(id: string): Promise<Animal | undefined>; 
+  insert(animal: AnimalCreador, callback: (err: Error | null, result?: Animal) => void): void; 
+  findById(id: string): Promise<Animal | null>; 
   findAll(): Promise<Animal[]>;
-  update(id: string, data: Partial<Animal>): Promise<Animal>; 
+  update(id: string, data: AnimalUpdate): Promise<Animal>; 
   delete(id: string): Promise<boolean>; 
 }
