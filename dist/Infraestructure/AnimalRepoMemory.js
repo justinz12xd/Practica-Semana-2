@@ -1,14 +1,10 @@
-import { IAnimalRepo, AnimalCreador, AnimalUpdate} from "../Domain/repositories/ianimal";
-import { Animal, CreadorDeAnimal} from "../Domain/entities/animal";
-
-export class AnimalRepoMemory implements IAnimalRepo {
-    private animals: Animal[] = [];
-
+import { CreadorDeAnimal } from "../Domain/entities/animal";
+export class AnimalRepoMemory {
     constructor() {
+        this.animals = [];
         this.Animalestontos();
     }
-
-    private Animalestontos() {
+    Animalestontos() {
         const datos = [
             {
                 nombre: "Firulais",
@@ -121,96 +117,85 @@ export class AnimalRepoMemory implements IAnimalRepo {
                 id_refugio: "refugio3"
             }
         ];
-        
         // Usa el factory para crear con ID automático
         this.animals.push(...datos.map(CreadorDeAnimal));
     }
-    insert(DatosAnimal: AnimalCreador, callback: (err: Error | null, result?: Animal) => void): void {
+    insert(DatosAnimal, callback) {
         setTimeout(() => {
             try {
                 // Validar que los datos no estén vacíos
                 if (!DatosAnimal) {
                     return callback(new Error("Datos del animal son requeridos"));
                 }
-
                 // Crear el animal usando el factory (genera ID automáticamente)
                 const nuevoAnimal = CreadorDeAnimal(DatosAnimal);
                 // Verificar duplicados por nombre y refugio (regla de negocio)
-                const existeDuplicado = this.animals.some(
-                    a => a.nombre.toLowerCase() === nuevoAnimal.nombre.toLowerCase() && 
-                         a.id_refugio === nuevoAnimal.id_refugio
-                );
-                
+                const existeDuplicado = this.animals.some(a => a.nombre.toLowerCase() === nuevoAnimal.nombre.toLowerCase() &&
+                    a.id_refugio === nuevoAnimal.id_refugio);
                 if (existeDuplicado) {
                     return callback(new Error(`Ya existe un animal con el nombre "${nuevoAnimal.nombre}" en este refugio`));
                 }
-
                 // Insertar en memoria
                 this.animals.push(nuevoAnimal);
-                
                 // Éxito: callback(null, resultado)
                 callback(null, nuevoAnimal);
-                
-            } catch (error) {
+            }
+            catch (error) {
                 // Error: callback(error)
                 if (error instanceof Error) {
                     callback(error);
-                } else {
+                }
+                else {
                     callback(new Error("Error desconocido al insertar animal"));
                 }
             }
         }, 500);
     }
-    async findById(id: string): Promise<Animal | null> {
+    async findById(id) {
         return new Promise((resolve) => {
             setTimeout(() => {
                 const animal = this.animals.find(a => a.id === id) || null;
                 resolve(animal);
             }, 500);
         });
-    }   
-    async findAll(): Promise<Animal[]> {
+    }
+    async findAll() {
         return new Promise((resolve) => {
             setTimeout(() => {
                 resolve(this.animals);
             }, 500);
         });
     }
-    async update(id: string, data: AnimalUpdate): Promise<Animal> {
+    async update(id, data) {
         return new Promise((resolve, reject) => {
             setTimeout(() => {
                 try {
                     //Aqui se valida si entra o no un ID
                     if (!id || id.trim() === "") {
-                        return reject(new Error("EL ID es requerido"))
+                        return reject(new Error("EL ID es requerido"));
                     }
                     //Aqui voy a validar lo que son los objetos o campos a actualizar
                     if (!data || Object.keys(data).length === 0) {
-                        return reject(new Error("Los datos que se van a actualizar son requeridos"))
+                        return reject(new Error("Los datos que se van a actualizar son requeridos"));
                     }
                     //Buscar el animal por ID(se crea una nueva busqueda para evitar conflictos)
-                    const indice= this.animals.findIndex(a => a.id === id);
+                    const indice = this.animals.findIndex(a => a.id === id);
                     if (indice === -1) {
                         return reject(new Error("No se pudo encontrar el animal con el ID proporcionado"));
-    
                     }
                     // Obtener el animal actual (sabemos que existe porque ya validamos el índice)
-                    const animalActual = this.animals[indice]!; // Assertion operator
-                    
+                    const animalActual = this.animals[indice]; // Assertion operator
                     //Ahora se verifica si el animal esta duplicado
-                    if (data.nombre){
-                        const animalDuplicado = this.animals.some(
-                            a => a.id !== id && 
-                            a.nombre.toLowerCase() === data.nombre!.toLowerCase() &&
-                            a.id_refugio === (data.id_refugio || animalActual.id_refugio)
-                        );
-                        if(animalDuplicado){
+                    if (data.nombre) {
+                        const animalDuplicado = this.animals.some(a => a.id !== id &&
+                            a.nombre.toLowerCase() === data.nombre.toLowerCase() &&
+                            a.id_refugio === (data.id_refugio || animalActual.id_refugio));
+                        if (animalDuplicado) {
                             return reject(new Error(`Ya existe un animal con el nombre "${data.nombre}" en este refugio`));
                         }
                     }
-                    
                     // Crear el animal actualizado con todos los campos requeridos
-                    const animalActualizado: Animal = {
+                    const animalActualizado = {
                         id: animalActual.id, // Preservar el ID original
                         nombre: data.nombre ?? animalActual.nombre,
                         especie: data.especie ?? animalActual.especie,
@@ -222,27 +207,25 @@ export class AnimalRepoMemory implements IAnimalRepo {
                         estadoAdopcion: data.estadoAdopcion ?? animalActual.estadoAdopcion,
                         id_refugio: data.id_refugio ?? animalActual.id_refugio
                     };
-
                     // Guardar los cambios en el array
                     this.animals[indice] = animalActualizado;
-
                     // Resolver la promesa con el animal actualizado
                     resolve(animalActualizado);
-                    
-                } catch (error) {
+                }
+                catch (error) {
                     // Manejar errores
                     if (error instanceof Error) {
                         reject(error);
-                    } else {
+                    }
+                    else {
                         reject(new Error("Error desconocido al actualizar animal"));
                     }
                 }
             }, 500);
         });
     }
-
     // DELETE - Async/Await (faltaba implementar)
-    async delete(id: string): Promise<boolean> {
+    async delete(id) {
         return new Promise((resolve, reject) => {
             setTimeout(() => {
                 try {
@@ -250,21 +233,20 @@ export class AnimalRepoMemory implements IAnimalRepo {
                     if (!id || id.trim() === "") {
                         return reject(new Error("ID del animal es requerido"));
                     }
-
                     // Buscar el animal
                     const index = this.animals.findIndex(a => a.id === id);
                     if (index === -1) {
                         return resolve(false); // No encontrado, pero no es error
                     }
-
                     // Eliminar del array
                     this.animals.splice(index, 1);
                     resolve(true); // Eliminado exitosamente
-                    
-                } catch (error) {
+                }
+                catch (error) {
                     if (error instanceof Error) {
                         reject(error);
-                    } else {
+                    }
+                    else {
                         reject(new Error("Error desconocido al eliminar animal"));
                     }
                 }
@@ -272,3 +254,4 @@ export class AnimalRepoMemory implements IAnimalRepo {
         });
     }
 }
+//# sourceMappingURL=AnimalRepoMemory.js.map
