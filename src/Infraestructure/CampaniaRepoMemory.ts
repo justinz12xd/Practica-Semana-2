@@ -1,46 +1,44 @@
-import { Campania, CreadorDeCampania } from "../Domain/entities/campania";
+import { Campania } from "../Domain/entities/campania";
+import { ICampaniaRepository } from "../Domain/repositories/icampania";
+import { v4 as uuidv4 } from "uuid";
 
-type CampaniaSinId = Omit<Campania, "id_campania">;
+export class CampaniaRepoMemory implements ICampaniaRepository {
+  private campanias: Campania[] = [];
 
-const ESTADOS_VALIDOS = ["programada", "en progreso", "finalizada", "cancelada"];
+  create(
+    campania: Omit<Campania, "id_campania">,
+    callback: (err: Error | null, result?: Campania) => void
+  ): void {
+    setTimeout(() => {
+      try {
+        if (!campania.tipo_campania || !campania.descripcion) {
+          return callback(new Error("Tipo de campaña y descripción son obligatorios"));
+        }
 
-export class CampaniaRepoMemory {
-  private items: Campania[] = [];
+        const nuevaCampania = new Campania(
+          uuidv4(),
+          campania.tipo_campania,
+          campania.titulo,
+          campania.descripcion,
+          campania.fecha_inicio,
+          campania.fecha_fin,
+          campania.lugar,
+          campania.organizador,
+          campania.estado
+        );
 
-  constructor() {
-    this.semilla();
+        this.campanias.push(nuevaCampania);
+        callback(null, nuevaCampania);
+      } catch (error) {
+        callback(error as Error);
+      }
+    }, 500);
   }
 
-  private semilla(): void {
-    const datos: CampaniaSinId[] = [
-      {
-        tipo_campania: "Vacunación",
-        titulo: "Jornada de Sarampión",
-        descripcion: "Vacunación gratuita para niños",
-        fecha_inicio: new Date("2025-10-01"),
-        fecha_fin: new Date("2025-10-05"),
-        lugar: "Centro de Salud",
-        organizador: "Municipalidad",
-        estado: "programada",
-      },
-      {
-        tipo_campania: "Donación",
-        titulo: "Donación de sangre",
-        descripcion: "Colecta mensual",
-        fecha_inicio: new Date("2025-10-10"),
-        fecha_fin: new Date("2025-10-10"),
-        lugar: "Hospital Central",
-        organizador: "Cruz Roja",
-        estado: "programada",
-      },
-    ];
-
-    this.items.push(...datos.map(CreadorDeCampania));
+  async update( id: string, data: Partial<Campania>): Promise<Campania> {
+    
   }
 
-  crear(data: CampaniaSinId): Campania {
-    const nuevo = CreadorDeCampania(data);
-    this.items.push(nuevo);
-    return nuevo;
-  }
 }
+
+
