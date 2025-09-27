@@ -18,6 +18,8 @@
     "ts-node-dev": "^2.0.0",
     "typescript": "^5.9.2"
   },
-  "type": "module"
-
+  "type": "module",
+  "dependencies": {
+    "uuid": "^13.0.0"
+  }
 }
