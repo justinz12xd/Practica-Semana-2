@@ -1,4 +1,4 @@
-import { Animal } from "../animal";
+import { Animal } from "../entities/animal";
 
 export interface IAnimalRepo {
   insert(animal: Animal, callback: (err: Error | null, result?: Animal) => void): void; 

@@ -1,4 +1,4 @@
-import { Campania } from "./campania";
+import { Campania } from "./entities/campania";
 
 
 export interface ICampania {
