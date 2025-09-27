@@ -1,5 +1,4 @@
-import { Campania } from "./entities/campania";
-
+import { Campania } from "../entities/campania";
 
 export interface ICampania {
     insert(campania: Campania, callback: (err: Error | null, result?: Campania) => void): void;
