@@ -300,13 +300,7 @@ async function mostrarResumenFinal() {
         Object.entries(estadisticas).forEach(([estado, cantidad]) => {
             console.log(`   ${estado}: ${cantidad} animales`);
         });
-        
-        console.log("\n¡Todas las operaciones CRUD completadas exitosamente!");
-        console.log(" Paradigmas implementados:");
-        console.log("   CREATE: Callbacks");
-        console.log("   READ: Async/Await");
-        console.log("   UPDATE: Promises");
-        console.log("   DELETE: Async/Await");
+
 
     } catch (error) {
         console.error(" Error en resumen final:", error);

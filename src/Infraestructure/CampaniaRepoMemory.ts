@@ -115,7 +115,7 @@ export class CompaniaRepoMemory implements ICampania {
     this.campanias.push(...datos_campania.map(CreadorDeCampania));
   }
 
-  insert(campania: Campania, callback: (err: Error | null, result?: Campania) => void): void {
+  insert(campania: CampaniaCreator, callback: (err: Error | null, result?: Campania) => void): void {
     setTimeout(() => {
       try {
         if (!campania) {

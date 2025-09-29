@@ -1,6 +1,7 @@
 import { Campania } from "../entities/campania";
 
 export interface CampaniaCreator {
+    id_campania: string;
     nombre: string;
     tipo_campania: string;
     titulo: string;
