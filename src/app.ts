@@ -4,23 +4,19 @@ import { DonacionRepoMemory } from "./Infraestructure/DonacionRepoMemory";
 import { CompaniaRepoMemory } from "./Infraestructure/CampaniaRepoMemory";
 import { AnimalCreador } from "./Domain/repositories/ianimal";
 
-console.log("🐾 === PRÁCTICA 2 - ARQUITECTURA HEXAGONAL - TODAS LAS ENTIDADES ===\n");
+console.log("PRÁCTICA 2\n");
 
-// ============================================
-// FUNCIÓN PARA MOSTRAR TODAS LAS ENTIDADES
-// ============================================
 async function mostrarTodasLasEntidades(
     animalRepo: AnimalRepoMemory, 
     usuarioRepo: UsuarioRepoMemory, 
     donacionRepo: DonacionRepoMemory, 
     campaniaRepo: CompaniaRepoMemory
 ) {
-    console.log("📊 === RESUMEN DE TODAS LAS ENTIDADES ===\n");
+    console.log(" RESUMEN DE TODAS LAS ENTIDADES\n");
 
-    // ANIMALES - FUNCIONANDO COMPLETAMENTE
     try {
         const animales = await animalRepo.findAll();
-        console.log(`🐾 ANIMALES (${animales.length} registros):`);
+        console.log(` ANIMALES (${animales.length} registros):`);
         animales.slice(0, 3).forEach((animal, index) => {
             console.log(`   ${index + 1}. ${animal.nombre} (${animal.especie}) - Estado: ${animal.estadoAdopcion}`);
             console.log(`      Edad: ${animal.edad} años | Refugio: ${animal.id_refugio} | ID: ${animal.id.substring(0, 8)}...`);
@@ -29,14 +25,13 @@ async function mostrarTodasLasEntidades(
             console.log(`   ... y ${animales.length - 3} animales más`);
         }
     } catch (error) {
-        console.error("❌ Error cargando animales:", error);
+        console.error(" Error cargando animales:", error);
     }
 
     console.log();
 
-    // USUARIOS - INTENTAR CARGAR (PUEDE NO TENER FINDALL IMPLEMENTADO)
     try {
-        console.log(`👥 USUARIOS:`);
+        console.log(`USUARIOS:`);
         if ('findAll' in usuarioRepo && typeof usuarioRepo.findAll === 'function') {
             const usuarios = await usuarioRepo.findAll();
             console.log(`   Total: ${usuarios.length} registros`);
@@ -48,18 +43,18 @@ async function mostrarTodasLasEntidades(
                 console.log(`   ... y ${usuarios.length - 3} usuarios más`);
             }
         } else {
-            console.log(`   ℹ️ Repositorio de usuarios inicializado (método findAll no disponible)`);
-            console.log(`   📝 Para ver usuarios, implementa el método findAll en UsuarioRepoMemory`);
+            console.log(`   Repositorio de usuarios inicializado (método findAll no disponible)`);
+            console.log(`    Para ver usuarios, implementa el método findAll en UsuarioRepoMemory`);
         }
     } catch (error) {
-        console.log(`   ⚠️ Repositorio de usuarios no disponible: ${error}`);
+        console.log(`    Repositorio de usuarios no disponible: ${error}`);
     }
 
     console.log();
 
     // DONACIONES - INTENTAR CARGAR
     try {
-        console.log(`💰 DONACIONES:`);
+        console.log(` DONACIONES:`);
         if ('findAll' in donacionRepo && typeof donacionRepo.findAll === 'function') {
             const donaciones = await donacionRepo.findAll();
             console.log(`   Total: ${donaciones.length} registros`);
@@ -71,18 +66,17 @@ async function mostrarTodasLasEntidades(
                 console.log(`   ... y ${donaciones.length - 3} donaciones más`);
             }
         } else {
-            console.log(`   ℹ️ Repositorio de donaciones inicializado (método findAll no disponible)`);
-            console.log(`   📝 Para ver donaciones, implementa el método findAll en DonacionRepoMemory`);
+            console.log(` Repositorio de donaciones inicializado (método findAll no disponible)`);
+            console.log(` Para ver donaciones, implementa el método findAll en DonacionRepoMemory`);
         }
     } catch (error) {
-        console.log(`   ⚠️ Repositorio de donaciones no disponible: ${error}`);
+        console.log(`  Repositorio de donaciones no disponible: ${error}`);
     }
 
     console.log();
 
-    // CAMPAÑAS - INTENTAR CARGAR
     try {
-        console.log(`📢 CAMPAÑAS:`);
+        console.log(` CAMPAÑAS:`);
         if ('findAll' in campaniaRepo && typeof campaniaRepo.findAll === 'function') {
             const campanias = await campaniaRepo.findAll();
             console.log(`   Total: ${campanias.length} registros`);
@@ -96,25 +90,24 @@ async function mostrarTodasLasEntidades(
                 console.log(`   ... y ${campanias.length - 3} campañas más`);
             }
         } else {
-            console.log(`   ℹ️ Repositorio de campañas inicializado (método findAll no disponible)`);
-            console.log(`   📝 Para ver campañas, implementa el método findAll en CampaniaRepoMemory`);
+            console.log(`    Repositorio de campañas inicializado (método findAll no disponible)`);
+            console.log(`    Para ver campañas, implementa el método findAll en CampaniaRepoMemory`);
         }
     } catch (error) {
-        console.log(`   ⚠️ Repositorio de campañas no disponible: ${error}`);
+        console.log(`   Repositorio de campañas no disponible: ${error}`);
     }
 
-    // ESTADÍSTICAS GENERALES SOLO DE ANIMALES (QUE SABEMOS QUE FUNCIONA)
-    console.log("\n📈 === ESTADÍSTICAS GENERALES ===");
+    console.log("\n === ESTADÍSTICAS GENERALES ===");
     try {
         const animales = await animalRepo.findAll();
-        console.log(`🏥 Animales en el sistema: ${animales.length} registros`);
+        console.log(` Animales en el sistema: ${animales.length} registros`);
         
         // Estadísticas de animales
         const animalesDisponibles = animales.filter(a => a.estadoAdopcion === 'Disponible').length;
         const animalesAdoptados = animales.filter(a => a.estadoAdopcion === 'Adoptado').length;
         const animalesEnProceso = animales.filter(a => a.estadoAdopcion === 'En proceso').length;
         
-        console.log(`🐾 Estado de adopción:`);
+        console.log(` Estado de adopción:`);
         console.log(`   • Disponibles: ${animalesDisponibles}`);
         console.log(`   • Adoptados: ${animalesAdoptados}`);
         console.log(`   • En proceso: ${animalesEnProceso}`);
@@ -122,19 +115,19 @@ async function mostrarTodasLasEntidades(
         // Por especie
         const perros = animales.filter(a => a.especie === 'Perro').length;
         const gatos = animales.filter(a => a.especie === 'Gato').length;
-        console.log(`🏷️ Por especie:`);
+        console.log(` Por especie:`);
         console.log(`   • Perros: ${perros}`);
         console.log(`   • Gatos: ${gatos}`);
 
-        console.log(`\n💡 Nota: Las otras entidades están inicializadas pero requieren implementar el método findAll para mostrar estadísticas completas.`);
+        console.log(`\n Nota: Las otras entidades están inicializadas pero requieren implementar el método findAll para mostrar estadísticas completas.`);
 
     } catch (error) {
-        console.error("❌ Error calculando estadísticas:", error);
+        console.error(" Error calculando estadísticas:", error);
     }
 }
 
 async function main() {
-    console.log("🏥 === DEMOSTRACIÓN DE TODAS LAS ENTIDADES ===\n");
+    console.log("=== DEMOSTRACIÓN DE TODAS LAS ENTIDADES ===\n");
     
     // Crear instancias de todos los repositorios
     const animalRepo = new AnimalRepoMemory();
@@ -144,68 +137,60 @@ async function main() {
     
     repoGlobal = animalRepo; // Para las operaciones CRUD detalladas
     
-    console.log("📦 Todos los repositorios inicializados con datos de prueba\n");
+    console.log("Todos los repositorios inicializados con datos de prueba\n");
 
-    // ====================================
-    // 1. MOSTRAR TODAS LAS ENTIDADES
-    // ====================================
+
     await mostrarTodasLasEntidades(animalRepo, usuarioRepo, donacionRepo, campaniaRepo);
     
     console.log("\n" + "=".repeat(80) + "\n");
-    console.log("🔄 === DEMOSTRACIÓN CRUD DETALLADA - ANIMALES ===\n");
+    console.log("=== DEMOSTRACIÓN CRUD DETALLADA - ANIMALES ===\n");
 
-    // ====================================
-    // 2. READ - Async/Await (Ver todos los animales)
-    // ====================================
-    console.log("🔍 === READ - FINDALL (Async/Await) ===");
+
+    console.log("=== READ - FINDALL (Async/Await) ===");
     try {
         const todosLosAnimales = await animalRepo.findAll();
-        console.log(`✅ Total de animales encontrados: ${todosLosAnimales.length}`);
+        console.log(`Total de animales encontrados: ${todosLosAnimales.length}`);
         
         // Mostrar algunos ejemplos
-        console.log("\n📋 Primeros 3 animales:");
+        console.log("\n Primeros 3 animales:");
         todosLosAnimales.slice(0, 3).forEach((animal, index) => {
             console.log(`   ${index + 1}. ${animal.nombre} (${animal.especie}) - Estado: ${animal.estadoAdopcion} - ID: ${animal.id.substring(0, 8)}...`);
         });
     } catch (error) {
-        console.error("❌ Error en findAll:", error);
+        console.error(" Error en findAll:", error);
     }
 
     console.log("\n" + "=".repeat(60) + "\n");
 
-    // ====================================
-    // 2. READ - Async/Await (Buscar por ID)
-    // ====================================
-    console.log("🔍 === READ - FINDBYID (Async/Await) ===");
+
+    console.log(" === READ - FINDBYID (Async/Await) ===");
     try {
         const animales = await animalRepo.findAll();
         if (animales.length === 0) {
-            console.log("❌ No hay animales en el repositorio");
+            console.log(" No hay animales en el repositorio");
             return;
         }
         
         const primerAnimal = animales[0]!; // Sabemos que existe porque ya validamos la longitud
-        console.log(`🎯 Buscando animal por ID: ${primerAnimal.id.substring(0, 8)}...`);
+        console.log(`Buscando animal por ID: ${primerAnimal.id.substring(0, 8)}...`);
         const animalEncontrado = await animalRepo.findById(primerAnimal.id);
         
         if (animalEncontrado) {
-            console.log(`✅ Animal encontrado: ${animalEncontrado.nombre} (${animalEncontrado.especie})`);
+            console.log(` Animal encontrado: ${animalEncontrado.nombre} (${animalEncontrado.especie})`);
             console.log(`   Edad: ${animalEncontrado.edad} años`);
             console.log(`   Estado: ${animalEncontrado.estadoAdopcion}`);
             console.log(`   Refugio: ${animalEncontrado.id_refugio}`);
         } else {
-            console.log("❌ Animal no encontrado");
+            console.log(" Animal no encontrado");
         }
     } catch (error) {
-        console.error("❌ Error en findById:", error);
+        console.error(" Error en findById:", error);
     }
 
     console.log("\n" + "=".repeat(60) + "\n");
 
-    // ====================================
-    // 3. CREATE - Callbacks
-    // ====================================
-    console.log("➕ === CREATE - INSERT (Callbacks) ===");
+ 
+    console.log("=== CREATE - INSERT (Callbacks) ===");
     
     const nuevoAnimal: AnimalCreador = {
         nombre: "Bobby",
@@ -219,14 +204,13 @@ async function main() {
         id_refugio: "refugio004"
     };
 
-    console.log(`🔄 Insertando nuevo animal: ${nuevoAnimal.nombre}...`);
+    console.log(` Insertando nuevo animal: ${nuevoAnimal.nombre}...`);
     
-    // Usar callback pattern
     animalRepo.insert(nuevoAnimal, (err, result) => {
         if (err) {
-            console.error("❌ Error al insertar:", err.message);
+            console.error(" Error al insertar:", err.message);
         } else {
-            console.log("✅ Animal insertado exitosamente:");
+            console.log(" Animal insertado exitosamente:");
             console.log(`   Nombre: ${result!.nombre}`);
             console.log(`   ID generado: ${result!.id.substring(0, 8)}...`);
             console.log(`   Especie: ${result!.especie}`);
@@ -238,15 +222,14 @@ async function main() {
     });
 }
 
-// Variable global para compartir la instancia del repositorio
 let repoGlobal: AnimalRepoMemory;
 
 // Función separada para UPDATE (Promises)
 function continuarConUpdate(animalId: string) {
     console.log("\n" + "=".repeat(60) + "\n");
     
-    console.log("✏️ === UPDATE - Promises ===");
-    console.log(`🔄 Actualizando animal con ID: ${animalId.substring(0, 8)}...`);
+    console.log("=== UPDATE - Promises ===");
+    console.log(` Actualizando animal con ID: ${animalId.substring(0, 8)}...`);
     
     const datosActualizacion = {
         edad: 3,
@@ -258,7 +241,7 @@ function continuarConUpdate(animalId: string) {
     // Usar promises con el repositorio global
     repoGlobal.update(animalId, datosActualizacion)
         .then((animalActualizado: any) => {
-            console.log("✅ Animal actualizado exitosamente:");
+            console.log(" Animal actualizado exitosamente:");
             console.log(`   Nombre: ${animalActualizado.nombre}`);
             console.log(`   Nueva edad: ${animalActualizado.edad} años`);
             console.log(`   Nuevo estado: ${animalActualizado.estado}`);
@@ -268,7 +251,7 @@ function continuarConUpdate(animalId: string) {
             continuarConDelete(animalId);
         })
         .catch((error: any) => {
-            console.error("❌ Error al actualizar:", error.message);
+            console.error(" Error al actualizar:", error.message);
         });
 }
 
@@ -276,23 +259,23 @@ function continuarConUpdate(animalId: string) {
 async function continuarConDelete(animalId: string) {
     console.log("\n" + "=".repeat(60) + "\n");
     
-    console.log("🗑️ === DELETE - Async/Await ===");
-    console.log(`🔄 Eliminando animal con ID: ${animalId.substring(0, 8)}...`);
+    console.log(" === DELETE - Async/Await ===");
+    console.log(` Eliminando animal con ID: ${animalId.substring(0, 8)}...`);
     
     try {
         const eliminado = await repoGlobal.delete(animalId);
         
         if (eliminado) {
-            console.log("✅ Animal eliminado exitosamente");
+            console.log(" Animal eliminado exitosamente");
         } else {
-            console.log("❌ Animal no encontrado para eliminar");
+            console.log("Animal no encontrado para eliminar");
         }
         
         // Mostrar resumen final
         await mostrarResumenFinal();
         
     } catch (error) {
-        console.error("❌ Error al eliminar:", error);
+        console.error(" Error al eliminar:", error);
     }
 }
 
@@ -300,12 +283,12 @@ async function continuarConDelete(animalId: string) {
 async function mostrarResumenFinal() {
     console.log("\n" + "=".repeat(60) + "\n");
     
-    console.log("📊 === RESUMEN FINAL ===");
+    console.log(" === RESUMEN FINAL ===");
     
     try {
         const animalesFinales = await repoGlobal.findAll();
         
-        console.log(`✅ Total de animales en el repositorio: ${animalesFinales.length}`);
+        console.log(`Total de animales en el repositorio: ${animalesFinales.length}`);
         
         // Estadísticas por estado de adopción
         const estadisticas = animalesFinales.reduce((acc, animal) => {
@@ -313,24 +296,24 @@ async function mostrarResumenFinal() {
             return acc;
         }, {} as Record<string, number>);
         
-        console.log("\n📈 Estadísticas por estado de adopción:");
+        console.log("\n Estadísticas por estado de adopción:");
         Object.entries(estadisticas).forEach(([estado, cantidad]) => {
             console.log(`   ${estado}: ${cantidad} animales`);
         });
         
-        console.log("\n🎉 ¡Todas las operaciones CRUD completadas exitosamente!");
-        console.log("🔄 Paradigmas implementados:");
-        console.log("   ✅ CREATE: Callbacks");
-        console.log("   ✅ READ: Async/Await");
-        console.log("   ✅ UPDATE: Promises");  
-        console.log("   ✅ DELETE: Async/Await");
-        
+        console.log("\n¡Todas las operaciones CRUD completadas exitosamente!");
+        console.log(" Paradigmas implementados:");
+        console.log("   CREATE: Callbacks");
+        console.log("   READ: Async/Await");
+        console.log("   UPDATE: Promises");
+        console.log("   DELETE: Async/Await");
+
     } catch (error) {
-        console.error("❌ Error en resumen final:", error);
+        console.error(" Error en resumen final:", error);
     }
 }
 
 // Ejecutar la aplicación
 main().catch((error) => {
-    console.error('❌ Error en la aplicación:', error);
+    console.error('Error en la aplicación:', error);
 });
