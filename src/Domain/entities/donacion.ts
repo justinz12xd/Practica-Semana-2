@@ -33,4 +33,4 @@ function ValidarDatosDonacion(data: Omit<Donacion, 'id_donacion'>): void {
     if (!data.metodo_pago?.trim()) throw new Error("Método de pago requerido");
     if (!['pendiente', 'completada', 'cancelada'].includes(data.estado)) throw new Error("Estado debe ser: pendiente, completada o cancelada");
     if (typeof data.anonima !== 'boolean') throw new Error("Anónima debe ser un valor booleano (true o false)");
-}s
+}

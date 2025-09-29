@@ -16,7 +16,6 @@ export interface UsuarioUpdate{
     contraseña?: string;
     telefono?: string;
     direccion?: string;
-    rol?: "admin" | "usuario" ;
 }
 
 export interface IUsuarioRepo {
